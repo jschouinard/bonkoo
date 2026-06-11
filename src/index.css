@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root { height: 100%; }
+
+body {
+  background:
+    radial-gradient(1200px 600px at 80% -10%, #FFE3D1 0%, transparent 60%),
+    radial-gradient(900px 500px at -10% 100%, #DCEEF9 0%, transparent 55%),
+    #FFF6F2;
+  color: #1F2440;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-weight: 600;
+}
+
+@layer components {
+  .btn { @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-2xl font-bold transition active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed; }
+  .btn-primary { @apply btn bg-bk-primary text-white hover:bg-bk-primaryDark shadow-soft; }
+  .btn-accent  { @apply btn bg-bk-accent text-white hover:bg-bk-accentDark shadow-soft; }
+  .btn-ghost   { @apply btn bg-white text-bk-ink border-2 border-bk-line hover:bg-bk-primaryLight; }
+  .btn-gain    { @apply btn bg-bk-gain text-white hover:bg-bk-gainDark; }
+  .btn-soft    { @apply btn bg-bk-primaryLight text-bk-primaryDark hover:bg-blue-100; }
+  .btn-warn    { @apply btn bg-bk-warn text-white hover:bg-violet-500; }
+  .card        { @apply bg-white rounded-3xl border-2 border-bk-line shadow-soft; }
+  .input       { @apply w-full rounded-2xl border-2 border-bk-line bg-white px-3 py-2 outline-none focus:ring-4 focus:ring-bk-primary/30 focus:border-bk-primary; }
+  .label       { @apply block text-sm font-bold text-bk-ink mb-1; }
+  .chip        { @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-bk-sand text-bk-ink; }
+}
+
+.kid-card {
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@keyframes pop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  60%  { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-pop { animation: pop 350ms ease-out both; }
+
+@keyframes burst {
+  0%   { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-40px) scale(1.4); opacity: 0; }
+}
+.animate-burst { animation: burst 700ms ease-out both; pointer-events: none; }
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(-2deg); }
+  75%      { transform: rotate(2deg); }
+}
+.animate-wiggle { animation: wiggle 600ms ease-in-out; }
