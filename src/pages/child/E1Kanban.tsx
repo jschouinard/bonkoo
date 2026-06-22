@@ -225,8 +225,8 @@ export default function E1Kanban() {
                   )}
                 </div>
               ))}
-              {/* Malus du jour visibles dans la colonne « J'ai fait » pour que l'enfant voie ce qui s'est passé */}
-              {col.key === 'déclaré' && malusToday.length > 0 && (
+              {/* Malus du jour dans la colonne « Approuvé » : ils sont déjà actés par le parent */}
+              {col.key === 'approuvé' && malusToday.length > 0 && (
                 <>
                   {malusToday.map(({ tx, malus }) => (
                     <MalusCard

@@ -5,7 +5,7 @@ import NipModal from '../common/NipModal';
 import { Home, CheckSquare, Library, Gift, LogOut, AlertOctagon } from 'lucide-react';
 
 const navItem = ({ isActive }: { isActive: boolean }) =>
-  `flex items-center gap-2 px-3 py-2.5 rounded-arcade text-sm font-display font-bold transition ${
+  `flex items-center gap-2 px-3 py-2.5 rounded-arcade text-sm font-display font-bold transition whitespace-nowrap shrink-0 ${
     isActive
       ? 'bg-bk-primary text-white border-2 border-bk-ink shadow-arcade'
       : 'text-bk-parentLight hover:bg-bk-parentSurface border-2 border-transparent'

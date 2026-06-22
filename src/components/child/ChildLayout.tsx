@@ -5,7 +5,7 @@ import { balanceOf, progressionOf, streakOf, childById } from '../../state/selec
 import { Home, Gift, Users, LogOut } from 'lucide-react';
 
 const tab = ({ isActive }: { isActive: boolean }) =>
-  `flex-1 flex flex-col items-center justify-center gap-1 py-3 text-xs font-display font-bold uppercase tracking-techno rounded-arcade transition ${
+  `flex-1 flex flex-col items-center justify-center gap-1 px-2 py-2.5 text-[11px] sm:text-xs font-display font-bold rounded-arcade transition leading-tight text-center ${
     isActive
       ? 'bg-bk-primary text-white border-[2.5px] border-bk-ink shadow-arcade'
       : 'bg-white text-bk-mute border-2 border-bk-ink/80 hover:bg-bk-cream'
