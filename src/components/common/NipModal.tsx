@@ -27,16 +27,16 @@ export default function NipModal({ open, onClose, onSuccess }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/40 grid place-items-center p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 bg-black/50 grid place-items-center p-4" onClick={onClose}>
       <div
         className="card p-6 w-full max-w-sm animate-pop"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center gap-2 mb-2 text-bk-ink">
           <Lock size={18} />
-          <h2 className="font-semibold text-lg">NIP parent</h2>
+          <h2 className="font-display font-extrabold text-xl">NIP parent</h2>
         </div>
-        <p className="text-sm text-bk-mute mb-4">
+        <p className="text-sm text-bk-mute mb-4 font-semibold">
           Le mode parent est verrouillé pour empêcher l'enfant d'accéder aux écrans de configuration.
         </p>
         <input
@@ -46,11 +46,11 @@ export default function NipModal({ open, onClose, onSuccess }: Props) {
           value={val}
           onChange={e => { setVal(e.target.value); setErr(false); }}
           onKeyDown={e => e.key === 'Enter' && submit()}
-          className="input text-center text-2xl tracking-[0.5em] font-mono"
+          className="input text-center text-3xl tracking-[0.5em] font-display font-extrabold"
           placeholder="••••"
         />
-        {err && <p className="text-sm text-rose-500 mt-2">NIP incorrect.</p>}
-        <div className="text-xs text-bk-mute mt-3">Démo : <strong>{state.famille.nip || '(à définir)'}</strong></div>
+        {err && <p className="text-sm text-bk-warn mt-2 font-bold">NIP incorrect.</p>}
+        <div className="text-xs text-bk-mute mt-3 font-bold uppercase tracking-techno">Démo : <strong className="text-bk-ink">{state.famille.nip || '(à définir)'}</strong></div>
         <div className="flex gap-2 mt-4">
           <button className="btn-ghost flex-1" onClick={onClose}>Annuler</button>
           <button className="btn-primary flex-1" onClick={submit}>Déverrouiller</button>

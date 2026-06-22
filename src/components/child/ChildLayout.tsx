@@ -5,8 +5,10 @@ import { balanceOf, progressionOf, streakOf, childById } from '../../state/selec
 import { Home, Gift, Users, LogOut } from 'lucide-react';
 
 const tab = ({ isActive }: { isActive: boolean }) =>
-  `flex-1 flex flex-col items-center justify-center gap-1 py-3 text-sm font-semibold rounded-2xl transition ${
-    isActive ? 'bg-bk-primary text-white shadow-soft' : 'bg-white text-bk-mute hover:bg-bk-sand'
+  `flex-1 flex flex-col items-center justify-center gap-1 py-3 text-xs font-display font-bold uppercase tracking-techno rounded-arcade transition ${
+    isActive
+      ? 'bg-bk-primary text-white border-[2.5px] border-bk-ink shadow-arcade'
+      : 'bg-white text-bk-mute border-2 border-bk-ink/80 hover:bg-bk-cream'
   }`;
 
 export default function ChildLayout() {
@@ -22,7 +24,7 @@ export default function ChildLayout() {
   const s = streakOf(state, child.id);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-bk-cream to-bk-sand/40">
+    <div className="min-h-screen flex flex-col shell-kid">
       <div className="p-3 md:p-6 max-w-3xl w-full mx-auto">
         <ChildHeader
           child={child}
@@ -35,7 +37,7 @@ export default function ChildLayout() {
       <main className="flex-1 max-w-3xl w-full mx-auto px-3 md:px-6 pb-28">
         <Outlet />
       </main>
-      <nav className="fixed bottom-0 left-0 right-0 p-3 bg-white/80 backdrop-blur border-t border-bk-line">
+      <nav className="fixed bottom-0 left-0 right-0 p-3 bg-bk-cream/90 backdrop-blur border-t-[2.5px] border-bk-ink">
         <div className="max-w-3xl mx-auto flex items-stretch gap-2">
           <NavLink to={`/child/${child.id}/today`} className={tab}>
             <Home size={20} /> Aujourd'hui
@@ -47,7 +49,7 @@ export default function ChildLayout() {
             <Users size={20} /> Famille
           </NavLink>
           <button
-            className="px-3 py-3 bg-white text-bk-mute rounded-2xl border border-bk-line"
+            className="px-3 py-3 bg-white text-bk-ink rounded-arcade border-2 border-bk-ink hover:bg-bk-cream"
             onClick={() => navigate('/')}
             title="Changer de profil"
           >

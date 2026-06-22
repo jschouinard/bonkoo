@@ -13,25 +13,29 @@ export default function L1ProfileSelector() {
   const hasAccount = state.parents.length > 0;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-b from-bk-cream to-bk-sand/40">
-      <div className="flex items-center gap-3 mb-8">
-        <div className="w-14 h-14 rounded-2xl bg-bk-primary text-white grid place-items-center font-bold text-3xl shadow-pop">B</div>
-        <div>
-          <h1 className="text-3xl font-bold leading-tight">Bonkoo</h1>
-          <p className="text-bk-mute text-sm">Qui utilise l'app ?</p>
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 shell-kid">
+      <div className="flex items-center gap-4 mb-10">
+        <div className="w-16 h-16 rounded-arcadeLg bg-bk-primary text-white grid place-items-center font-display font-extrabold text-4xl border-[2.5px] border-bk-ink shadow-arcadeLg leading-none">b</div>
+        <div className="flex flex-col gap-1">
+          <span className="wordmark text-5xl text-bk-ink">bonkoo</span>
+          <div className="h-2.5 w-full rounded-full bg-bk-ink/10 overflow-hidden relative">
+            <div className="absolute inset-y-0 left-0 w-2/3 bg-bk-primary rounded-full" />
+            <div className="absolute top-1/2 left-2/3 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-bk-accent border-2 border-bk-ink" />
+          </div>
+          <p className="text-bk-mute text-xs font-bold uppercase tracking-techno mt-0.5">Qui joue ?</p>
         </div>
       </div>
 
       {!hasAccount ? (
         <div className="card p-8 max-w-md w-full text-center">
-          <p className="text-bk-ink mb-4">Bienvenue ! Pour commencer, crée ton compte parent.</p>
-          <button className="btn-primary w-full" onClick={() => navigate('/signup')}>
+          <p className="text-bk-ink mb-4 font-semibold">Bienvenue ! Pour commencer, crée ton compte parent.</p>
+          <button className="btn-primary w-full text-base" onClick={() => navigate('/signup')}>
             <UserPlus size={18} /> Créer mon compte parent
           </button>
           <div className="mt-4 text-xs text-bk-mute">
             ou{' '}
             <button
-              className="underline hover:text-bk-ink"
+              className="underline hover:text-bk-ink font-bold"
               onClick={() => { dispatch({ type: 'LOAD_SEED' }); }}
             >
               charger un foyer de démo
@@ -45,27 +49,27 @@ export default function L1ProfileSelector() {
               <button
                 key={child.id}
                 onClick={() => navigate(`/child/${child.id}/today`)}
-                className="card p-6 flex flex-col items-center gap-3 hover:shadow-card hover:-translate-y-0.5 transition kid-card"
+                className="card p-6 flex flex-col items-center gap-3 hover:-translate-y-0.5 hover:shadow-arcadeXl transition kid-card"
               >
                 <div className="text-6xl">{child.avatar}</div>
-                <div className="font-bold text-lg">{child.prénom}</div>
-                <div className="chip">Mode enfant</div>
+                <div className="font-display font-extrabold text-2xl text-bk-ink leading-none">{child.prénom}</div>
+                <div className="chip-primary">Mode enfant</div>
               </button>
             ))}
             <button
               onClick={() => setAskNip(true)}
-              className="card p-6 flex flex-col items-center justify-center gap-3 hover:shadow-card hover:-translate-y-0.5 transition border-dashed"
+              className="card p-6 flex flex-col items-center justify-center gap-3 hover:-translate-y-0.5 hover:shadow-arcadeXl transition border-dashed bg-bk-cream"
             >
-              <div className="w-16 h-16 rounded-2xl bg-bk-sand grid place-items-center">
-                <ShieldCheck size={32} className="text-bk-primary" />
+              <div className="w-16 h-16 rounded-arcade bg-bk-ink text-white grid place-items-center border-2 border-bk-ink">
+                <ShieldCheck size={32} />
               </div>
-              <div className="font-bold">Mode parent</div>
-              <div className="text-xs text-bk-mute">Verrouillé par NIP</div>
+              <div className="font-display font-extrabold text-lg text-bk-ink">Mode parent</div>
+              <div className="chip">🔒 NIP</div>
             </button>
           </div>
 
           <button
-            className="mt-10 text-xs text-bk-mute hover:text-bk-ink flex items-center gap-1"
+            className="mt-10 text-xs text-bk-mute hover:text-bk-ink flex items-center gap-1 font-bold uppercase tracking-techno"
             onClick={() => {
               if (confirm('Réinitialiser le proto au foyer de démo ?')) {
                 clearState();
