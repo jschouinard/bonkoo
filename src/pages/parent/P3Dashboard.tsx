@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useBonkoo } from '../../state/context';
-import { balanceOf, progressionOf, streakOf, allPendingApprovals, pendingRedeems, todayOccurrences } from '../../state/selectors';
-import { ArrowRight, CheckSquare, Gift, AlertOctagon, Flame, Trophy, ShieldCheck } from 'lucide-react';
+import { balanceOf, progressionOf, streakOf, levelOf, allPendingApprovals, pendingRedeems, todayOccurrences } from '../../state/selectors';
+import { ArrowRight, CheckSquare, Gift, AlertOctagon, Flame, Trophy } from 'lucide-react';
 
 export default function P3Dashboard() {
   const { state } = useBonkoo();
@@ -64,10 +64,10 @@ export default function P3Dashboard() {
                   <div className="text-xs text-bk-mute">solde</div>
                 </div>
               </div>
-              <div className="grid grid-cols-4 gap-2 text-center text-sm">
+              <div className="grid grid-cols-3 gap-2 text-center text-sm">
                 <div className="bg-bk-cream rounded-xl p-2">
                   <div className="flex items-center justify-center gap-1 text-bk-level font-bold">
-                    <Trophy size={14} /> {p}
+                    <Trophy size={14} /> {levelOf(p)}
                   </div>
                   <div className="text-[10px] uppercase text-bk-mute">Niveau</div>
                 </div>
@@ -76,12 +76,6 @@ export default function P3Dashboard() {
                     <Flame size={14} /> {s.longueur_actuelle}
                   </div>
                   <div className="text-[10px] uppercase text-bk-mute">Série</div>
-                </div>
-                <div className="bg-bk-cream rounded-xl p-2">
-                  <div className="flex items-center justify-center gap-1 text-bk-gain font-bold">
-                    <ShieldCheck size={14} /> {s.longueur_sans_malus}
-                  </div>
-                  <div className="text-[10px] uppercase text-bk-mute">Sans malus</div>
                 </div>
                 <div className="bg-bk-cream rounded-xl p-2">
                   <div className="font-bold">{done}/{total}</div>

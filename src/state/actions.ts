@@ -22,7 +22,8 @@ export type Action =
   | { type: 'ACTIVATE_SYSTEM_MALUS'; sysMalusId: string }
   | { type: 'CREATE_MALUS'; malus: Omit<Malus, 'id' | 'famille_id' | 'est_modèle_système' | 'actif'> }
   | { type: 'SET_NIP'; nip: string }
-  | { type: 'FINISH_ONBOARDING' }
+  | { type: 'FINISH_ONBOARDING' }  // ⚠ V2 : fait l'auto-assign de tous les bonkoo × enfants
+                                   // SYNCHRONE dans le reducer (corrige le setTimeout V1)
   | { type: 'UPDATE_FAMILY'; patch: Partial<Family> }
 
   // Boucle quotidienne
@@ -32,7 +33,21 @@ export type Action =
   | { type: 'REJECT_OCCURRENCE'; occurrenceId: string; raison?: string; parentId: string }
   | { type: 'APPLY_MALUS'; childId: string; malusId: string; parentId: string }
 
-  // Récompenses
+  // ── V2 : cycle de vie d'un JEU ─────────────────────────────────────────
+  // D1 : l'enfant crée le jeu → en_attente_validation, va dans la file P3
+  | { type: 'CREATE_GAME'; childId: string; rewardId: string }
+  // D1 : le parent approuve → actif
+  | { type: 'APPROVE_GAME'; gameId: string; parentId: string }
+  // D1 : le parent refuse → l'enfant rechoisit (D3 : points conservés)
+  | { type: 'REJECT_GAME'; gameId: string; parentId: string; raison?: string }
+  // D4 : l'enfant réclame sa récompense (solde ≥ coût + geste explicite)
+  | { type: 'CLAIM_REWARD'; gameId: string }
+  // D4 : parent approuve la réclamation → dépense + jeu terminé (D3 : surplus conservé)
+  | { type: 'APPROVE_CLAIM'; gameId: string; parentId: string }
+  // D4 : parent refuse la réclamation (rare, p.ex. erreur enfant)
+  | { type: 'REJECT_CLAIM'; gameId: string; parentId: string }
+
+  // Récompenses libres (avant V2 / hors jeu) — conservé
   | { type: 'REQUEST_REDEEM'; childId: string; rewardId: string }
   | { type: 'APPROVE_REDEEM'; exchangeId: string; parentId: string }
   | { type: 'REJECT_REDEEM'; exchangeId: string; parentId: string }

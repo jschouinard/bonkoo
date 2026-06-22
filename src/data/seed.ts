@@ -3,6 +3,7 @@ import type {
   BonkooState,
   Child,
   Family,
+  Game,
   Malus,
   Occurrence,
   Parent,
@@ -13,30 +14,28 @@ import type {
 } from '../types';
 import { nowISO, todayISO, uid } from '../utils/helpers';
 
-// ------- Bibliothèque système (modèles) — PRD A.3.2 -------
+// ------- Bibliothèque système — modèles prêts à activer (V2 : sans champ routine) -------
 
 const SYS_FAMILY = 'sys';
 
 export const systemBehaviors: Behavior[] = [
-  // Matin
-  { id: 'sb-brosser-m',  famille_id: null, type: 'tâche', nom: 'Brosser les dents (matin)', icône: '🪥', taille: 'petite',  valeur_points: 5,  récurrence: 'quotidienne', jours_actifs: [], routine: 'matin', est_modèle_système: true, actif: true, créé_le: nowISO() },
-  { id: 'sb-habiller',   famille_id: null, type: 'tâche', nom: "M'habiller seul",            icône: '👕', taille: 'petite',  valeur_points: 5,  récurrence: 'quotidienne', jours_actifs: [], routine: 'matin', est_modèle_système: true, actif: true, créé_le: nowISO() },
-  { id: 'sb-lit',        famille_id: null, type: 'tâche', nom: 'Faire mon lit',              icône: '🛏️', taille: 'petite',  valeur_points: 5,  récurrence: 'quotidienne', jours_actifs: [], routine: 'matin', est_modèle_système: true, actif: true, créé_le: nowISO() },
-  { id: 'sb-déjeuner',   famille_id: null, type: 'tâche', nom: 'Manger mon déjeuner',        icône: '🥞', taille: 'moyenne', valeur_points: 10, récurrence: 'quotidienne', jours_actifs: [], routine: 'matin', est_modèle_système: true, actif: true, créé_le: nowISO() },
-  { id: 'sb-école',      famille_id: null, type: 'tâche', nom: 'Préparer mon sac',           icône: '🎒', taille: 'petite',  valeur_points: 5,  récurrence: 'jours_précis', jours_actifs: ['lun','mar','mer','jeu','ven'], routine: 'matin', est_modèle_système: true, actif: true, créé_le: nowISO() },
-  // Midi
-  { id: 'sb-dîner',      famille_id: null, type: 'tâche', nom: 'Manger mon dîner',           icône: '🍱', taille: 'moyenne', valeur_points: 10, récurrence: 'quotidienne', jours_actifs: [], routine: 'midi', est_modèle_système: true, actif: true, créé_le: nowISO() },
-  // Soir
-  { id: 'sb-souper',     famille_id: null, type: 'tâche', nom: 'Manger mon souper',          icône: '🍽️', taille: 'moyenne', valeur_points: 10, récurrence: 'quotidienne', jours_actifs: [], routine: 'soir',  est_modèle_système: true, actif: true, créé_le: nowISO() },
-  { id: 'sb-laver',      famille_id: null, type: 'tâche', nom: 'Me laver',                   icône: '🛁', taille: 'moyenne', valeur_points: 10, récurrence: 'quotidienne', jours_actifs: [], routine: 'soir',  est_modèle_système: true, actif: true, créé_le: nowISO() },
-  { id: 'sb-pyjama',     famille_id: null, type: 'tâche', nom: 'Mettre mon pyjama',          icône: '🌙', taille: 'petite',  valeur_points: 5,  récurrence: 'quotidienne', jours_actifs: [], routine: 'soir',  est_modèle_système: true, actif: true, créé_le: nowISO() },
-  { id: 'sb-brosser-s',  famille_id: null, type: 'tâche', nom: 'Brosser les dents (soir)',   icône: '🪥', taille: 'petite',  valeur_points: 5,  récurrence: 'quotidienne', jours_actifs: [], routine: 'soir',  est_modèle_système: true, actif: true, créé_le: nowISO() },
-  { id: 'sb-ranger',     famille_id: null, type: 'tâche', nom: 'Ranger mes choses',          icône: '🧸', taille: 'moyenne', valeur_points: 10, récurrence: 'quotidienne', jours_actifs: [], routine: 'soir',  est_modèle_système: true, actif: true, créé_le: nowISO() },
-  // Libre (consignes — toute la journée)
-  { id: 'sb-écouter',    famille_id: null, type: 'consigne', nom: 'Écouter du premier coup', icône: '👂', taille: 'moyenne', valeur_points: 10, récurrence: 'quotidienne', jours_actifs: [], routine: 'libre', est_modèle_système: true, actif: true, créé_le: nowISO() },
-  { id: 'sb-respect',    famille_id: null, type: 'consigne', nom: 'Parler avec respect',     icône: '🗣️', taille: 'moyenne', valeur_points: 10, récurrence: 'quotidienne', jours_actifs: [], routine: 'libre', est_modèle_système: true, actif: true, créé_le: nowISO() },
-  { id: 'sb-calme',      famille_id: null, type: 'consigne', nom: 'Rester calme',            icône: '🧘', taille: 'grande',  valeur_points: 20, récurrence: 'quotidienne', jours_actifs: [], routine: 'libre', est_modèle_système: true, actif: true, créé_le: nowISO() },
-  { id: 'sb-partager',   famille_id: null, type: 'consigne', nom: 'Partager',                icône: '🤝', taille: 'petite',  valeur_points: 5,  récurrence: 'quotidienne', jours_actifs: [], routine: 'libre', est_modèle_système: true, actif: true, créé_le: nowISO() },
+  // Tâches du quotidien
+  { id: 'sb-brosser-m',  famille_id: null, type: 'tâche', nom: 'Brosser les dents (matin)', icône: '🪥', taille: 'petite',  valeur_points: 5,  récurrence: 'quotidienne', jours_actifs: [], est_modèle_système: true, actif: true, créé_le: nowISO() },
+  { id: 'sb-brosser-s',  famille_id: null, type: 'tâche', nom: 'Brosser les dents (soir)',   icône: '🪥', taille: 'petite',  valeur_points: 5,  récurrence: 'quotidienne', jours_actifs: [], est_modèle_système: true, actif: true, créé_le: nowISO() },
+  { id: 'sb-habiller',   famille_id: null, type: 'tâche', nom: "M'habiller seul",            icône: '👕', taille: 'petite',  valeur_points: 5,  récurrence: 'quotidienne', jours_actifs: [], est_modèle_système: true, actif: true, créé_le: nowISO() },
+  { id: 'sb-lit',        famille_id: null, type: 'tâche', nom: 'Faire mon lit',              icône: '🛏️', taille: 'petite',  valeur_points: 5,  récurrence: 'quotidienne', jours_actifs: [], est_modèle_système: true, actif: true, créé_le: nowISO() },
+  { id: 'sb-déjeuner',   famille_id: null, type: 'tâche', nom: 'Manger mon déjeuner',        icône: '🥞', taille: 'moyenne', valeur_points: 10, récurrence: 'quotidienne', jours_actifs: [], est_modèle_système: true, actif: true, créé_le: nowISO() },
+  { id: 'sb-dîner',      famille_id: null, type: 'tâche', nom: 'Manger mon dîner',           icône: '🍱', taille: 'moyenne', valeur_points: 10, récurrence: 'quotidienne', jours_actifs: [], est_modèle_système: true, actif: true, créé_le: nowISO() },
+  { id: 'sb-souper',     famille_id: null, type: 'tâche', nom: 'Manger mon souper',          icône: '🍽️', taille: 'moyenne', valeur_points: 10, récurrence: 'quotidienne', jours_actifs: [], est_modèle_système: true, actif: true, créé_le: nowISO() },
+  { id: 'sb-laver',      famille_id: null, type: 'tâche', nom: 'Me laver',                   icône: '🛁', taille: 'moyenne', valeur_points: 10, récurrence: 'quotidienne', jours_actifs: [], est_modèle_système: true, actif: true, créé_le: nowISO() },
+  { id: 'sb-pyjama',     famille_id: null, type: 'tâche', nom: 'Mettre mon pyjama',          icône: '🌙', taille: 'petite',  valeur_points: 5,  récurrence: 'quotidienne', jours_actifs: [], est_modèle_système: true, actif: true, créé_le: nowISO() },
+  { id: 'sb-ranger',     famille_id: null, type: 'tâche', nom: 'Ranger mes choses',          icône: '🧸', taille: 'moyenne', valeur_points: 10, récurrence: 'quotidienne', jours_actifs: [], est_modèle_système: true, actif: true, créé_le: nowISO() },
+  { id: 'sb-école',      famille_id: null, type: 'tâche', nom: 'Préparer mon sac',           icône: '🎒', taille: 'petite',  valeur_points: 5,  récurrence: 'jours_précis', jours_actifs: ['lun','mar','mer','jeu','ven'], est_modèle_système: true, actif: true, créé_le: nowISO() },
+  // Consignes (autocontrôle)
+  { id: 'sb-écouter',    famille_id: null, type: 'consigne', nom: 'Écouter du premier coup', icône: '👂', taille: 'moyenne', valeur_points: 10, récurrence: 'quotidienne', jours_actifs: [], est_modèle_système: true, actif: true, créé_le: nowISO() },
+  { id: 'sb-respect',    famille_id: null, type: 'consigne', nom: 'Parler avec respect',     icône: '🗣️', taille: 'moyenne', valeur_points: 10, récurrence: 'quotidienne', jours_actifs: [], est_modèle_système: true, actif: true, créé_le: nowISO() },
+  { id: 'sb-calme',      famille_id: null, type: 'consigne', nom: 'Rester calme',            icône: '🧘', taille: 'grande',  valeur_points: 20, récurrence: 'quotidienne', jours_actifs: [], est_modèle_système: true, actif: true, créé_le: nowISO() },
+  { id: 'sb-partager',   famille_id: null, type: 'consigne', nom: 'Partager',                icône: '🤝', taille: 'petite',  valeur_points: 5,  récurrence: 'quotidienne', jours_actifs: [], est_modèle_système: true, actif: true, créé_le: nowISO() },
 ];
 
 export const systemMalus: Malus[] = [
@@ -47,7 +46,7 @@ export const systemMalus: Malus[] = [
   { id: 'sm-désordre', famille_id: null, nom: 'Laisser du désordre',     icône: '🧹', gravité: 'légère',  valeur_points: -5,  est_modèle_système: true, actif: true },
 ];
 
-// ------- État initial du proto (foyer démo prêt à explorer) -------
+// ------- État initial du proto V2 — Léo a déjà un jeu actif sur "30 min d'écran" -------
 
 export const buildSeedState = (): BonkooState => {
   const famille: Family = {
@@ -58,6 +57,8 @@ export const buildSeedState = (): BonkooState => {
     plancher_solde: 0,
     solde_négatif_autorisé: false,
     nip: '1234',
+    heure_coucher: '19:30',
+    notifications_actives: true,
     créé_le: nowISO(),
   };
 
@@ -70,8 +71,8 @@ export const buildSeedState = (): BonkooState => {
     { id: 'k-mia', famille_id: famille.id, prénom: 'Mia', avatar: '🦊', mode_interface: 'visuel', créé_le: nowISO() },
   ];
 
-  // Activés dans la famille — couvre les 3 moments + libre
-  const activated = ['sb-brosser-m','sb-habiller','sb-déjeuner','sb-dîner','sb-souper','sb-pyjama','sb-brosser-s','sb-écouter','sb-école'];
+  // Bonkoo activés dans le foyer (sélection raisonnable de routines clés)
+  const activated = ['sb-brosser-m','sb-brosser-s','sb-habiller','sb-déjeuner','sb-dîner','sb-souper','sb-pyjama','sb-ranger','sb-écouter','sb-école'];
   const comportements: Behavior[] = systemBehaviors
     .filter(b => activated.includes(b.id))
     .map(b => ({ ...b, id: 'fb-' + b.id, famille_id: famille.id, est_modèle_système: false }));
@@ -79,15 +80,14 @@ export const buildSeedState = (): BonkooState => {
   const assignations: BehaviorAssignment[] = [];
   comportements.forEach(b => {
     enfants.forEach(e => {
-      // Mia (3 ans) exemptée du sac d'école
-      if (e.id === 'k-mia' && b.nom.includes('sac')) return;
+      if (e.id === 'k-mia' && b.nom.includes('sac')) return; // Mia (3 ans) exemptée du sac d'école
       assignations.push({ id: uid('a-'), comportement_id: b.id, enfant_id: e.id });
     });
   });
 
   const today = todayISO();
 
-  // Quelques occurrences pré-semées
+  // Quelques occurrences pré-semées du jour
   const occurrences: Occurrence[] = [];
   comportements.forEach(b => {
     enfants.forEach(e => {
@@ -97,11 +97,9 @@ export const buildSeedState = (): BonkooState => {
       let traité_le: string | undefined;
       let traité_par: string | undefined;
       let déclaré_le: string | undefined;
-      // Léo : matin déjà bien avancé
       if (e.id === 'k-leo' && b.nom.includes('Brosser') && b.nom.includes('matin')) { statut = 'approuvé'; valeur_créditée = b.valeur_points; déclaré_le = nowISO(); traité_le = nowISO(); traité_par = 'p-1'; }
       if (e.id === 'k-leo' && b.nom.includes('habiller')) { statut = 'approuvé'; valeur_créditée = b.valeur_points; déclaré_le = nowISO(); traité_le = nowISO(); traité_par = 'p-1'; }
       if (e.id === 'k-leo' && b.nom.includes('déjeuner')) { statut = 'déclaré'; déclaré_le = nowISO(); }
-      // Mia
       if (e.id === 'k-mia' && b.nom.includes('Brosser') && b.nom.includes('matin')) { statut = 'déclaré'; déclaré_le = nowISO(); }
       if (e.id === 'k-mia' && b.nom.includes('déjeuner')) { statut = 'approuvé'; valeur_créditée = b.valeur_points; déclaré_le = nowISO(); traité_le = nowISO(); traité_par = 'p-1'; }
       occurrences.push({
@@ -118,11 +116,13 @@ export const buildSeedState = (): BonkooState => {
     });
   });
 
+  // V2 : récompenses avec niveau_requis (D6)
+  // Suggestion : petite ≤ 30 → niv 1, moyenne 31-75 → niv 2, grande 76-150 → niv 3, épique >150 → niv 4
   const récompenses: Reward[] = [
-    { id: 'r-écran',   famille_id: famille.id, nom: '30 min d’écran',  icône: '📱', type: 'écran',     coût_points: 50,  actif: true },
-    { id: 'r-parc',    famille_id: famille.id, nom: 'Sortie au parc',  icône: '🛝', type: 'sortie',    coût_points: 100, actif: true },
-    { id: 'r-jouet',   famille_id: famille.id, nom: 'Petit jouet',     icône: '🎁', type: 'objet',     coût_points: 200, actif: true },
-    { id: 'r-cinéma',  famille_id: famille.id, nom: 'Soirée cinéma',   icône: '🎬', type: 'privilège', coût_points: 150, actif: true },
+    { id: 'r-écran',   famille_id: famille.id, nom: '30 min d’écran',  icône: '📱', type: 'écran',     coût_points: 50,  niveau_requis: 1, actif: true },
+    { id: 'r-parc',    famille_id: famille.id, nom: 'Sortie au parc',  icône: '🛝', type: 'sortie',    coût_points: 100, niveau_requis: 2, actif: true },
+    { id: 'r-cinéma',  famille_id: famille.id, nom: 'Soirée cinéma',   icône: '🎬', type: 'privilège', coût_points: 150, niveau_requis: 2, actif: true },
+    { id: 'r-jouet',   famille_id: famille.id, nom: 'Petit jouet',     icône: '🎁', type: 'objet',     coût_points: 200, niveau_requis: 3, actif: true },
   ];
 
   // Transactions historiques (5 derniers jours) — soldes parlants
@@ -145,26 +145,38 @@ export const buildSeedState = (): BonkooState => {
     pushTx('k-leo', 'gain_tâche', 10, da);
     pushTx('k-leo', 'gain_consigne', 10, da);
   });
-  // Léo aujourd'hui : 2 approuvés (matin)
   pushTx('k-leo', 'gain_tâche', 5, 0);
   pushTx('k-leo', 'gain_tâche', 5, 0);
   [3, 2, 1].forEach(da => {
     pushTx('k-mia', 'gain_tâche', 5, da);
     pushTx('k-mia', 'gain_tâche', 10, da);
   });
-  pushTx('k-mia', 'gain_tâche', 10, 0); // déjeuner approuvé
+  pushTx('k-mia', 'gain_tâche', 10, 0);
 
   const cum: Record<string, number> = {};
   transactions
     .sort((a, b) => a.créé_le.localeCompare(b.créé_le))
     .forEach(t => {
       cum[t.enfant_id] = (cum[t.enfant_id] || 0) + t.valeur_signée;
-      t.solde_après = cum[t.enfant_id];
+      t.solde_après = cum[t.enfant_id]!;
     });
 
+  // V2 : Léo a déjà un jeu actif sur "30 min d'écran" (coût 50, son solde ≈ 110 → réclamable)
+  const jeux: Game[] = [
+    {
+      id: 'g-leo-écran',
+      enfant_id: 'k-leo',
+      récompense_id: 'r-écran',
+      statut: 'actif',
+      créé_le: new Date(Date.now() - 3 * 86400000).toISOString(),
+      validé_le: new Date(Date.now() - 3 * 86400000 + 600000).toISOString(),
+    },
+  ];
+
+  // V2 Streak — D7 : pas de meilleure_longueur, pas de longueur_sans_malus
   const séries: Streak[] = [
-    { enfant_id: 'k-leo', longueur_actuelle: 4, meilleure_longueur: 6, longueur_sans_malus: 4, meilleure_sans_malus: 6, dernière_date: today, paliers_atteints: [] },
-    { enfant_id: 'k-mia', longueur_actuelle: 2, meilleure_longueur: 2, longueur_sans_malus: 2, meilleure_sans_malus: 2, dernière_date: today, paliers_atteints: [] },
+    { enfant_id: 'k-leo', longueur_actuelle: 4, dernière_date_active: today, paliers_atteints: [] },
+    { enfant_id: 'k-mia', longueur_actuelle: 2, dernière_date_active: today, paliers_atteints: [] },
   ];
 
   return {
@@ -178,6 +190,7 @@ export const buildSeedState = (): BonkooState => {
     récompenses,
     échanges: [],
     transactions,
+    jeux,
     séries,
     notifications: [],
     onboarding_terminé: true,
@@ -193,6 +206,8 @@ export const buildEmptyState = (): BonkooState => {
     plancher_solde: 0,
     solde_négatif_autorisé: false,
     nip: '',
+    heure_coucher: '19:30',
+    notifications_actives: true,
     créé_le: nowISO(),
   };
   return {
@@ -206,6 +221,7 @@ export const buildEmptyState = (): BonkooState => {
     récompenses: [],
     échanges: [],
     transactions: [],
+    jeux: [],
     séries: [],
     notifications: [],
     onboarding_terminé: false,

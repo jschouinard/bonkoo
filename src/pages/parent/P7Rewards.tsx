@@ -9,7 +9,7 @@ const TYPES: RewardType[] = ['privilège','sortie','objet','écran','autre'];
 export default function P7Rewards() {
   const { state, dispatch } = useBonkoo();
   const [creating, setCreating] = useState(false);
-  const [draft, setDraft] = useState({ nom: '', icône: '🎁', type: 'objet' as RewardType, coût_points: 100 });
+  const [draft, setDraft] = useState({ nom: '', icône: '🎁', type: 'objet' as RewardType, coût_points: 100, niveau_requis: 1 });
 
   const create = () => {
     if (!draft.nom.trim() || draft.coût_points <= 0) return;

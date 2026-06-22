@@ -1,16 +1,17 @@
 import type { Child } from '../../types';
 import PointsJar from '../common/PointsJar';
-import { Flame, Trophy, ShieldCheck } from 'lucide-react';
+import { levelOf } from '../../state/selectors';
+import { Flame, Trophy } from 'lucide-react';
 
 type Props = {
   child: Child;
   balance: number;
   progression: number;
   streak: number;
-  noMalusStreak: number;
 };
 
-export default function ChildHeader({ child, balance, progression, streak, noMalusStreak }: Props) {
+export default function ChildHeader({ child, balance, progression, streak }: Props) {
+  const niveau = levelOf(progression);
   return (
     <div className="card p-3 md:p-4 flex items-center gap-3 md:gap-5">
       <div className="text-4xl md:text-5xl">{child.avatar}</div>
@@ -22,7 +23,7 @@ export default function ChildHeader({ child, balance, progression, streak, noMal
         <PointsJar points={balance} />
         <div className="flex flex-col items-center gap-1 px-2.5 py-1.5 bg-bk-level text-white rounded-arcade border-2 border-bk-ink shadow-arcade">
           <div className="flex items-center gap-1 font-display font-extrabold text-base leading-none">
-            <Trophy size={14} /> {progression}
+            <Trophy size={14} /> {niveau}
           </div>
           <div className="text-[9px] uppercase tracking-techno font-bold opacity-90">Niveau</div>
         </div>
@@ -31,15 +32,6 @@ export default function ChildHeader({ child, balance, progression, streak, noMal
             <Flame size={14} className="animate-flame" /> {streak}
           </div>
           <div className="text-[9px] uppercase tracking-techno font-bold opacity-90">Série</div>
-        </div>
-        <div
-          className="hidden sm:flex flex-col items-center gap-1 px-2.5 py-1.5 bg-bk-gain text-bk-ink rounded-arcade border-2 border-bk-ink shadow-arcade"
-          title="Jours d'affilée sans malus"
-        >
-          <div className="flex items-center gap-1 font-display font-extrabold text-base leading-none">
-            <ShieldCheck size={14} /> {noMalusStreak}
-          </div>
-          <div className="text-[9px] uppercase tracking-techno font-bold">Sans malus</div>
         </div>
       </div>
     </div>

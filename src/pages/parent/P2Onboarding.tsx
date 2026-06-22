@@ -48,17 +48,10 @@ export default function P2Onboarding() {
     }
     if (step === 4) {
       dispatch({ type: 'SET_NIP', nip });
+      // V2 : FINISH_ONBOARDING fait l'auto-assignation et génère les occurrences du jour
+      // de façon synchrone dans le reducer. Plus de setTimeout.
       dispatch({ type: 'FINISH_ONBOARDING' });
-      // Auto-assigner tous les comportements créés à tous les enfants
-      setTimeout(() => {
-        // accès au state via setTimeout pour avoir l'état le plus récent
-        const allKids = state.enfants.map(c => c.id);
-        state.comportements.forEach(b => {
-          dispatch({ type: 'ASSIGN_BEHAVIOR', behaviorId: b.id, childIds: allKids });
-        });
-        dispatch({ type: 'ENSURE_TODAY_OCCURRENCES' });
-        navigate('/parent/dashboard');
-      }, 0);
+      navigate('/parent/dashboard');
       return;
     }
     setStep((s) => (s + 1) as Step);
@@ -195,7 +188,7 @@ export default function P2Onboarding() {
               </div>
               <button
                 className="btn-primary w-full"
-                onClick={() => dispatch({ type: 'CREATE_REWARD', reward: { nom: rNom, icône: rIcon, type: 'écran', coût_points: rCost } })}
+                onClick={() => dispatch({ type: 'CREATE_REWARD', reward: { nom: rNom, icône: rIcon, type: 'écran', coût_points: rCost, niveau_requis: 1 } })}
                 disabled={!rNom.trim() || rCost <= 0}
               >
                 <Plus size={16} /> Ajouter

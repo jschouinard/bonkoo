@@ -2,16 +2,8 @@ import { useState } from 'react';
 import { useBonkoo } from '../../state/context';
 import { systemBehaviors, systemMalus } from '../../data/seed';
 import { Plus, Check, Power, Library } from 'lucide-react';
-import type { Routine } from '../../types';
 
 const ICONS = ['🪥','👕','🥞','🍱','🍽️','🛏️','🧸','🛁','🎒','🌙','👂','🗣️','🧘','🤝','📚','🥦','🚴','🎵','🎨'];
-
-const ROUTINE_OPTIONS: { key: Routine; label: string; emoji: string }[] = [
-  { key: 'matin', label: 'Matin',    emoji: '🌅' },
-  { key: 'midi',  label: 'Midi',     emoji: '☀️' },
-  { key: 'soir',  label: 'Soir',     emoji: '🌙' },
-  { key: 'libre', label: 'Toujours', emoji: '⭐' },
-];
 
 export default function P6Library() {
   const { state, dispatch } = useBonkoo();
@@ -25,7 +17,6 @@ export default function P6Library() {
     valeur_points: 10,
     récurrence: 'quotidienne' as 'quotidienne' | 'jours_précis' | 'unique',
     jours_actifs: [] as ('lun'|'mar'|'mer'|'jeu'|'ven'|'sam'|'dim')[],
-    routine: 'libre' as Routine,
   });
 
   const activeIds = new Set(state.comportements.map(b => b.nom));
@@ -118,21 +109,6 @@ export default function P6Library() {
                 <div>
                   <label className="label">Valeur en points</label>
                   <input className="input" type="number" value={draft.valeur_points} onChange={e => setDraft({ ...draft, valeur_points: Number(e.target.value) })} />
-                </div>
-                <div>
-                  <label className="label">Moment de la journée</label>
-                  <div className="grid grid-cols-4 gap-2">
-                    {ROUTINE_OPTIONS.map(r => (
-                      <button
-                        key={r.key}
-                        onClick={() => setDraft({ ...draft, routine: r.key })}
-                        className={`p-2 rounded-xl border-2 text-sm font-bold ${draft.routine === r.key ? 'border-bk-primary bg-bk-primaryLight text-bk-primaryDark' : 'border-bk-line bg-white text-bk-mute'}`}
-                      >
-                        <div className="text-xl">{r.emoji}</div>
-                        {r.label}
-                      </button>
-                    ))}
-                  </div>
                 </div>
                 <div className="flex gap-2">
                   <button className="btn-ghost flex-1" onClick={() => setCreating(false)}>Annuler</button>

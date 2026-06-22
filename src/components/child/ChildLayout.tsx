@@ -31,7 +31,6 @@ export default function ChildLayout() {
           balance={balance}
           progression={progression}
           streak={s.longueur_actuelle}
-          noMalusStreak={s.longueur_sans_malus}
         />
       </div>
       <main className="flex-1 max-w-3xl w-full mx-auto px-3 md:px-6 pb-28">
