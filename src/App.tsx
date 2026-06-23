@@ -8,9 +8,11 @@ import P4Approvals from './pages/parent/P4Approvals';
 import P5ApplyMalus from './pages/parent/P5ApplyMalus';
 import P6Library from './pages/parent/P6Library';
 import P7Rewards from './pages/parent/P7Rewards';
-import E1Kanban from './pages/child/E1Kanban';
-import E2Rewards from './pages/child/E2Rewards';
-import E3Family from './pages/child/E3Family';
+import E4MyGame from './pages/child/E4MyGame';
+import E5Rewards from './pages/child/E5Rewards';
+import E6Family from './pages/child/E6Family';
+import E2NewGameReward from './pages/child/E2NewGameReward';
+import E3NewGameBonkoo from './pages/child/E3NewGameBonkoo';
 import ParentLayout from './components/parent/ParentLayout';
 import ChildLayout from './components/child/ChildLayout';
 
@@ -35,9 +37,11 @@ export default function App() {
 
       <Route path="/child/:childId" element={<ChildLayout />}>
         <Route index element={<Navigate to="today" replace />} />
-        <Route path="today" element={<E1Kanban />} />
-        <Route path="rewards" element={<E2Rewards />} />
-        <Route path="family" element={<E3Family />} />
+        <Route path="today" element={<E4MyGame />} />
+        <Route path="rewards" element={<E5Rewards />} />
+        <Route path="family" element={<E6Family />} />
+        <Route path="new-game/reward" element={<E2NewGameReward />} />
+        <Route path="new-game/bonkoo" element={<E3NewGameBonkoo />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

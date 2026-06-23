@@ -1,6 +1,7 @@
 import { Outlet, useParams, NavLink, useNavigate } from 'react-router-dom';
 import { useBonkoo } from '../../state/context';
 import ChildHeader from './ChildHeader';
+import { GameEventsListener } from './Celebrations';
 import { balanceOf, progressionOf, streakOf, childById } from '../../state/selectors';
 import { Home, Gift, Users, LogOut } from 'lucide-react';
 
@@ -39,7 +40,7 @@ export default function ChildLayout() {
       <nav className="fixed bottom-0 left-0 right-0 p-3 bg-bk-cream/90 backdrop-blur border-t-[2.5px] border-bk-ink">
         <div className="max-w-3xl mx-auto flex items-stretch gap-2">
           <NavLink to={`/child/${child.id}/today`} className={tab}>
-            <Home size={20} /> Aujourd'hui
+            <Home size={20} /> Mon jeu
           </NavLink>
           <NavLink to={`/child/${child.id}/rewards`} className={tab}>
             <Gift size={20} /> Récompenses
@@ -56,6 +57,9 @@ export default function ChildLayout() {
           </button>
         </div>
       </nav>
+
+      {/* Célébrations animées (C1 / C2 / C3) déclenchées sur les transitions de state */}
+      <GameEventsListener childId={child.id} />
     </div>
   );
 }

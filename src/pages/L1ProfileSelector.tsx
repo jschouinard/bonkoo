@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBonkoo } from '../state/context';
 import NipModal from '../components/common/NipModal';
-import { RotateCcw, ShieldCheck, UserPlus } from 'lucide-react';
+import { progressionOf, streakOf, levelOf } from '../state/selectors';
+import { RotateCcw, ShieldCheck, UserPlus, ArrowRight, Flame } from 'lucide-react';
 import { clearState } from '../utils/persistence';
 
 export default function L1ProfileSelector() {
@@ -44,27 +45,41 @@ export default function L1ProfileSelector() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-2xl w-full">
-            {state.enfants.map(child => (
-              <button
-                key={child.id}
-                onClick={() => navigate(`/child/${child.id}/today`)}
-                className="card p-6 flex flex-col items-center gap-3 hover:-translate-y-0.5 hover:shadow-arcadeXl transition kid-card"
-              >
-                <div className="text-6xl">{child.avatar}</div>
-                <div className="font-display font-extrabold text-2xl text-bk-ink leading-none">{child.prénom}</div>
-                <div className="chip-primary">Mode enfant</div>
-              </button>
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl w-full">
+            {state.enfants.map(child => {
+              const niveau = levelOf(progressionOf(state, child.id));
+              const série = streakOf(state, child.id).longueur_actuelle;
+              return (
+                <button
+                  key={child.id}
+                  onClick={() => navigate(`/child/${child.id}/today`)}
+                  className="card p-4 flex items-center gap-3 hover:-translate-y-0.5 hover:shadow-arcadeXl transition kid-card text-left"
+                >
+                  <div className="w-14 h-14 rounded-arcade bg-bk-level border-2 border-bk-ink grid place-items-center text-3xl shrink-0">
+                    {child.avatar}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-display font-extrabold text-2xl text-bk-ink leading-none">{child.prénom}</div>
+                    <div className="text-[11px] uppercase tracking-techno text-bk-mute font-bold mt-1 flex items-center gap-2">
+                      <span>NIV. {niveau}</span>
+                      <span className="text-bk-streak inline-flex items-center gap-0.5"><Flame size={10} className="inline" /> {série}</span>
+                    </div>
+                  </div>
+                  <ArrowRight className="text-bk-primary shrink-0" />
+                </button>
+              );
+            })}
             <button
               onClick={() => setAskNip(true)}
-              className="card p-6 flex flex-col items-center justify-center gap-3 hover:-translate-y-0.5 hover:shadow-arcadeXl transition border-dashed bg-bk-cream"
+              className="card p-4 flex items-center gap-3 hover:-translate-y-0.5 hover:shadow-arcadeXl transition border-dashed bg-bk-cream"
             >
-              <div className="w-16 h-16 rounded-arcade bg-bk-ink text-white grid place-items-center border-2 border-bk-ink">
-                <ShieldCheck size={32} />
+              <div className="w-14 h-14 rounded-arcade bg-bk-ink text-white grid place-items-center border-2 border-bk-ink shrink-0">
+                <ShieldCheck size={28} />
               </div>
-              <div className="font-display font-extrabold text-lg text-bk-ink">Mode parent</div>
-              <div className="chip">🔒 NIP</div>
+              <div className="flex-1 text-left">
+                <div className="font-display font-extrabold text-lg text-bk-ink leading-none">Mode parent</div>
+                <div className="text-[11px] uppercase tracking-techno text-bk-mute font-bold mt-1">🔒 NIP requis</div>
+              </div>
             </button>
           </div>
 
