@@ -53,6 +53,11 @@ export type Action =
   | { type: 'REJECT_REDEEM'; exchangeId: string; parentId: string }
   | { type: 'MARK_DELIVERED'; exchangeId: string }
 
+  // Notifications (O2)
+  | { type: 'MARK_NOTIFICATION_READ'; notificationId: string }
+  | { type: 'MARK_ALL_NOTIFICATIONS_READ' }
+  | { type: 'CLEAR_NOTIFICATIONS' }
+
   // Système
   | { type: 'RESET' }
   | { type: 'LOAD_SEED' };

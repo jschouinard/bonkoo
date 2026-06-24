@@ -1,8 +1,31 @@
-import type { BonkooState, Occurrence, PointTransaction, Exchange, Game, Streak } from '../types';
+import type { BonkooState, Occurrence, PointTransaction, Exchange, Game, Streak, Notification } from '../types';
 import type { Action } from './actions';
 import { buildEmptyState, buildSeedState, systemBehaviors, systemMalus } from '../data/seed';
 import { nowISO, todayISO, uid, dayOfWeek } from '../utils/helpers';
 import { PALIERS_SERIE } from './economy';
+
+// O2 — helper pour générer une notification (parent ou enfant)
+const addNotif = (
+  state: BonkooState,
+  destinataire_type: 'parent' | 'enfant',
+  destinataire_id: string,
+  type: string,
+  contenu: string,
+): BonkooState => {
+  if (destinataire_type === 'parent' && !state.famille.notifications_actives) return state;
+  const n: Notification = {
+    id: uid('n-'),
+    destinataire_type,
+    destinataire_id,
+    type,
+    contenu,
+    lu: false,
+    créé_le: nowISO(),
+  };
+  return { ...state, notifications: [n, ...state.notifications] };
+};
+
+const firstParentId = (state: BonkooState): string => state.parents[0]?.id ?? 'p-1';
 
 const computeBalance = (state: BonkooState, childId: string): number =>
   state.transactions
@@ -276,15 +299,28 @@ export const reducer = (state: BonkooState, action: Action): BonkooState => {
     case 'ENSURE_TODAY_OCCURRENCES':
       return ensureChildBehaviorForToday(state);
 
-    case 'DECLARE_OCCURRENCE':
-      return {
+    case 'DECLARE_OCCURRENCE': {
+      const occ = state.occurrences.find(o => o.id === action.occurrenceId);
+      if (!occ || occ.statut !== 'à_faire') return state;
+      const b = state.comportements.find(c => c.id === occ.comportement_id);
+      const child = state.enfants.find(c => c.id === occ.enfant_id);
+      const s1: BonkooState = {
         ...state,
         occurrences: state.occurrences.map(o =>
-          o.id === action.occurrenceId && o.statut === 'à_faire'
+          o.id === action.occurrenceId
             ? { ...o, statut: 'déclaré', déclaré_le: nowISO() }
             : o,
         ),
       };
+      // O2 : notifier le parent
+      return addNotif(
+        s1,
+        'parent',
+        firstParentId(state),
+        'declaration',
+        `${child?.avatar ?? ''} ${child?.prénom ?? 'Enfant'} a déclaré « ${b?.nom ?? 'Bonkoo'} »`,
+      );
+    }
 
     case 'APPROVE_OCCURRENCE': {
       const occ = state.occurrences.find(o => o.id === action.occurrenceId);
@@ -342,6 +378,7 @@ export const reducer = (state: BonkooState, action: Action): BonkooState => {
       if (existing) return state;
       const reward = state.récompenses.find(r => r.id === action.rewardId);
       if (!reward || !reward.actif) return state;
+      const child = state.enfants.find(c => c.id === action.childId);
       const g: Game = {
         id: uid('g-'),
         enfant_id: action.childId,
@@ -349,7 +386,14 @@ export const reducer = (state: BonkooState, action: Action): BonkooState => {
         statut: 'en_attente_validation',
         créé_le: nowISO(),
       };
-      return { ...state, jeux: [...state.jeux, g] };
+      const s1 = { ...state, jeux: [...state.jeux, g] };
+      return addNotif(
+        s1,
+        'parent',
+        firstParentId(state),
+        'jeu_créé',
+        `${child?.avatar ?? ''} ${child?.prénom ?? 'Enfant'} veut viser « ${reward.nom} »`,
+      );
     }
 
     case 'APPROVE_GAME':
@@ -380,12 +424,20 @@ export const reducer = (state: BonkooState, action: Action): BonkooState => {
       if (!reward) return state;
       const bal = computeBalance(state, game.enfant_id);
       if (bal < reward.coût_points) return state;
-      return {
+      const child = state.enfants.find(c => c.id === game.enfant_id);
+      const s1 = {
         ...state,
         jeux: state.jeux.map(j =>
-          j.id === game.id ? { ...j, statut: 'récompense_réclamée', réclamé_le: nowISO() } : j,
+          j.id === game.id ? { ...j, statut: 'récompense_réclamée' as const, réclamé_le: nowISO() } : j,
         ),
       };
+      return addNotif(
+        s1,
+        'parent',
+        firstParentId(state),
+        'reclamation',
+        `${child?.avatar ?? ''} ${child?.prénom ?? 'Enfant'} réclame « ${reward.nom} » 🎁`,
+      );
     }
 
     case 'APPROVE_CLAIM': {
@@ -471,6 +523,24 @@ export const reducer = (state: BonkooState, action: Action): BonkooState => {
           x.id === action.exchangeId ? { ...x, statut: 'remis' } : x,
         ),
       };
+
+    // ── O2 — Notifications ─────────────────────────────────────────────
+    case 'MARK_NOTIFICATION_READ':
+      return {
+        ...state,
+        notifications: state.notifications.map(n =>
+          n.id === action.notificationId ? { ...n, lu: true } : n,
+        ),
+      };
+
+    case 'MARK_ALL_NOTIFICATIONS_READ':
+      return {
+        ...state,
+        notifications: state.notifications.map(n => ({ ...n, lu: true })),
+      };
+
+    case 'CLEAR_NOTIFICATIONS':
+      return { ...state, notifications: [] };
 
     default:
       return state;

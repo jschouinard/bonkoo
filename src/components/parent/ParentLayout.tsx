@@ -2,7 +2,11 @@ import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useBonkoo } from '../../state/context';
 import NipModal from '../common/NipModal';
-import { Home, CheckSquare, Library, Gift, LogOut, AlertOctagon } from 'lucide-react';
+import {
+  pendingGameCreations, pendingGameClaims,
+  allPendingApprovals, pendingRedeems,
+} from '../../state/selectors';
+import { Home, CheckSquare, Library, Gift, LogOut, AlertOctagon, Bell, Settings } from 'lucide-react';
 
 const navItem = ({ isActive }: { isActive: boolean }) =>
   `flex items-center gap-2 px-3 py-2.5 rounded-arcade text-sm font-display font-bold transition whitespace-nowrap shrink-0 ${
@@ -38,8 +42,11 @@ export default function ParentLayout() {
 
   const onboarding = !state.onboarding_terminé;
   const pendingCount =
-    state.occurrences.filter(o => o.statut === 'déclaré').length +
-    state.échanges.filter(e => e.statut === 'demandé').length;
+    allPendingApprovals(state).length +
+    pendingRedeems(state).length +
+    pendingGameCreations(state).length +
+    pendingGameClaims(state).length;
+  const unreadNotifs = state.notifications.filter(n => n.destinataire_type === 'parent' && !n.lu).length;
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row shell-parent">
@@ -60,9 +67,16 @@ export default function ParentLayout() {
                 <span className="ml-auto chip bg-bk-primary text-white">{pendingCount}</span>
               )}
             </NavLink>
+            <NavLink to="/parent/notifications" className={navItem}>
+              <Bell size={16} /> Notifications
+              {unreadNotifs > 0 && (
+                <span className="ml-auto chip bg-bk-streak text-white">{unreadNotifs}</span>
+              )}
+            </NavLink>
             <NavLink to="/parent/malus" className={navItem}><AlertOctagon size={16} /> Appliquer un malus</NavLink>
             <NavLink to="/parent/library" className={navItem}><Library size={16} /> Bibliothèques</NavLink>
             <NavLink to="/parent/rewards" className={navItem}><Gift size={16} /> Récompenses</NavLink>
+            <NavLink to="/parent/settings" className={navItem}><Settings size={16} /> Réglages</NavLink>
           </nav>
           <div className="mt-6 md:absolute md:bottom-4 md:left-4 md:right-4">
             <button
