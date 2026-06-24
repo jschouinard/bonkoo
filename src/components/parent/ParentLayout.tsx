@@ -6,7 +6,7 @@ import {
   pendingGameCreations, pendingGameClaims,
   allPendingApprovals, pendingRedeems,
 } from '../../state/selectors';
-import { Home, CheckSquare, Library, Gift, LogOut, AlertOctagon, Bell, Settings } from 'lucide-react';
+import { Home, CheckSquare, Library, Gift, LogOut, AlertOctagon, Bell, Settings, Users } from 'lucide-react';
 
 const navItem = ({ isActive }: { isActive: boolean }) =>
   `flex items-center gap-2 px-3 py-2.5 rounded-arcade text-sm font-display font-bold transition whitespace-nowrap shrink-0 ${
@@ -73,6 +73,7 @@ export default function ParentLayout() {
                 <span className="ml-auto chip bg-bk-streak text-white">{unreadNotifs}</span>
               )}
             </NavLink>
+            <NavLink to="/parent/children" className={navItem}><Users size={16} /> Enfants</NavLink>
             <NavLink to="/parent/malus" className={navItem}><AlertOctagon size={16} /> Appliquer un malus</NavLink>
             <NavLink to="/parent/library" className={navItem}><Library size={16} /> Bibliothèques</NavLink>
             <NavLink to="/parent/rewards" className={navItem}><Gift size={16} /> Récompenses</NavLink>

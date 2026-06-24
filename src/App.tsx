@@ -10,6 +10,7 @@ import P6Library from './pages/parent/P6Library';
 import P7Rewards from './pages/parent/P7Rewards';
 import P8Settings from './pages/parent/P8Settings';
 import O2Notifications from './pages/parent/O2Notifications';
+import P4Children from './pages/parent/P4Children';
 import E4MyGame from './pages/child/E4MyGame';
 import E5Rewards from './pages/child/E5Rewards';
 import E6Family from './pages/child/E6Family';
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="malus" element={<P5ApplyMalus />} />
         <Route path="library" element={<P6Library />} />
         <Route path="rewards" element={<P7Rewards />} />
+        <Route path="children" element={<P4Children />} />
         <Route path="notifications" element={<O2Notifications />} />
         <Route path="settings" element={<P8Settings />} />
       </Route>

@@ -11,6 +11,7 @@ export type Action =
   // Onboarding
   | { type: 'SIGNUP'; parent: Omit<Parent, 'id' | 'famille_id' | 'créé_le'>; foyerNom: string }
   | { type: 'ADD_CHILD'; child: Omit<Child, 'id' | 'famille_id' | 'créé_le'> }
+  | { type: 'UPDATE_CHILD'; childId: string; patch: Partial<Child> }
   | { type: 'REMOVE_CHILD'; childId: string }
   | { type: 'ACTIVATE_SYSTEM_BEHAVIOR'; sysBehaviorId: string }
   | { type: 'TOGGLE_FAMILY_BEHAVIOR'; behaviorId: string }

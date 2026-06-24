@@ -190,6 +190,14 @@ export const reducer = (state: BonkooState, action: Action): BonkooState => {
       };
     }
 
+    case 'UPDATE_CHILD':
+      return {
+        ...state,
+        enfants: state.enfants.map(c =>
+          c.id === action.childId ? { ...c, ...action.patch } : c,
+        ),
+      };
+
     case 'REMOVE_CHILD':
       return {
         ...state,

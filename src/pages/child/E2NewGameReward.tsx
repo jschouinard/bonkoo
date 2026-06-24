@@ -71,11 +71,11 @@ export default function E2NewGameReward() {
       </div>
 
       {actives.length === 0 && (
-        <div className="card p-6 text-center">
-          <div className="text-4xl mb-2">🎁</div>
-          <div className="font-display font-extrabold text-lg">Aucune récompense</div>
-          <p className="text-sm text-bk-mute font-semibold mt-1">
-            Demande à papa ou maman d'en ajouter !
+        <div className="card p-8 text-center border-dashed">
+          <div className="text-5xl mb-3">🎁</div>
+          <div className="font-display font-extrabold text-xl">Aucune récompense !</div>
+          <p className="text-sm text-bk-mute font-semibold mt-2 max-w-xs mx-auto">
+            Demande à papa ou maman d'en ajouter dans le mode parent pour démarrer un jeu.
           </p>
         </div>
       )}
